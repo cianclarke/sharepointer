@@ -1,0 +1,18 @@
+{
+  "name": "sharepointer",
+  "version": "1.0.0",
+  "description": "Sharepoint library with support for multiple authentication strategies",
+  "main": "sharepoint.js",
+  "scripts": {
+    "test": "mocha -A -u exports --recursive -t 10000 ./test/unit"
+  },
+  "author": "Cian Clarke",
+  "license" : "MIT",
+  "dependencies": {
+    "agentkeepalive": ">=1.2.0",
+    "async": "~0.2.9",
+    "httpntlm": "^1.5.2",
+    "request": "^2.60.0",
+    "underscore-deep-extend": "0.0.5"
+  }
+}
