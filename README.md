@@ -3,8 +3,8 @@ Node.js Sharepoint client which is
 * Not written in CofeeScript
 * Has test coverage
 * Supports multiple authentication schemas - currently:
-	* NTLM
-	* Basic
+  * NTLM
+  * Basic
 * Will accept pull requests - 'cause I'm nice like that
 
 ## A Sharepoint Primer
@@ -61,12 +61,52 @@ When initialising Sharepoint, there are a number of optional params which can be
 ## Methods
 
 ### Lists
+As mentioned above, SharePoint is driven by lists. The base SharePoint API allows you to `CRUDL` lists, but the read operation doesn't return items[] or fields[] - this is a separate API operation. 
+With Sharepointer, list read operations also retrieve all fields[] and items[] on the list for convenience.  
 
 #### List
-
+    
+    sharepoint.lists.list(function(err, listRes){
+      // listRes will be an array of lists [{ Id : '1a2b3c', ... }, { Id : '2b3c4d' }, { Id : '5d6e7f' }]
+    });
+    
 #### Read
+List Read can take a string as the first param (assumes list Id), or a params object specifying either a guid or title.  
+Note that list read also returns fields[] and items[]. This is different to how the SharePoint API behaves, and is offered as a convenience. 
+    
+    // Get a list by ID - you can find this under the 'Id' preoprty in "lists" lists
+    sharepoint.lists.read('someListGUID', function(err, listReadResult){
+      // listReadResult will be an object { Id : 'someListGUID', Title : 'SomeListTitle', items : [{}, {}], fields : [{}, {}]  ... }
+    });
+    
+    // Get a list by name
+    sharepoint.lists.read({title : 'some list name' }, function(err, listReadResult){
+      // listReadResult will be an object { Id : 'someListGUID', Title : 'some list name', ... }
+    });
+    
+#### Create
+Creating a result requires a title and a description. 
 
-#### Update
-// TODO
-
+    sharepoint.lists.create({ title : 'My new list', description : 'Some list description' }, function(err, createRes){
+      // createRes will be the newly created list as an object { Id : 'someListGUID', title : 'My new list', ...}
+    });
+    
+### Update
+Updating requires an ID and a title. Optionally, you can just specify all this in one object. 
+    
+    // Update with 2 params
+    return sharepoint.lists.update('someListGuid', { Title : 'MyNewTitle' }, function(err, updateResult){
+      // updateResult will be the object you passed in, but not the full list. To get the fully updated object, a subsequent read is needed. 
+    });
+    
+    // update all in 1 param
+    return sharepoint.lists.update({ Id : 'someListGuid', Title : 'MyNewTitle' }, function(err, updateResult){
+    });
+    
 #### Delete
+Delete requires a list Id. Deletion by title is not possible. 
+    
+    sharepoint.lists.del('someListId', function(err){
+      // Err will indicate if somethign went wrong - there's no second param
+    });
+    
