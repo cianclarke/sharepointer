@@ -1,24 +1,13 @@
-Node.js Sharepoint client which is  
+Yet another Node.js Sharepoint client. This one:
 
-* Not written in CofeeScript
 * Has test coverage
+* Isn't written in CofeeScript
 * Supports multiple authentication schemas - currently:
   * NTLM
   * Basic
-* Will accept pull requests - 'cause I'm nice like that
+* Accepts pull requests :-)
 
-## A Sharepoint Primer
-Skip this if you don't know anything about SharePoint. Here's the basics I wanted to know about this product before I began integrating:
-
-
-* Sharepoint is a number of products:
-  * SharePoint 2013 - the on premise version of Sharepoint which I've seen most often. 
-  * Sharepoint 365 - the online SharePoint product. 
-* **Everything is a List** in SharePoint. Document Library? A list. The tasks app? Just a list. Discussion Board? You got it, it's a list. Site Pages? List. Turns out, Sharepoint reuses the base type `List` for a lot of things. 
-* 
-
-
-## Usage Examples
+# Usage Example
     
     var sharepoint = require('sharepoint')({
       username : 'someusername',
@@ -31,12 +20,11 @@ Skip this if you don't know anything about SharePoint. Here's the basics I wante
       if (err){
         return console.error(err);
       }
-      console.log("Logged in OK");
+      // Once logged in, we can list the "lists" within sharepoint
       sharepoint.lists.list(function(err, listRes){
-        var one = listRes[0];
-        console.log('got one');
-        console.log(one.Id);
-        sharepoint.lists.read(one.Id, function(err, singleResult){
+        var aList = listRes[0];
+        // We can pick a particular list, and read it. This also gives us the list's Items[] and Fields[]
+        sharepoint.lists.read(aList.Id, function(err, listRead){
           console.log(singleResult);
         });
       });
@@ -57,26 +45,48 @@ When initialising Sharepoint, there are a number of optional params which can be
       strictSSL : true // set to false if connecting to SP instance with self-signed cert
     });
     
+# A Sharepoint Primer
+Skip this if you already know enough about SharePoint.  
+Here's the basics I wanted to know about this product before I began integrating:
+
+
+* Sharepoint is a number of products:
+  * SharePoint 2013 - the on premise version of Sharepoint which I've seen most often. 
+  * Sharepoint 365 - the online SharePoint product. 
+* **Everything is a List** in SharePoint. Document Library? A list. The tasks app? Just a list. Discussion Board? You got it, it's a list. Site Pages? List. Turns out, Sharepoint reuses the base type `List` for a lot of things. 
+
     
-## Methods
+    
+# Methods
 
-### Lists
-As mentioned above, SharePoint is driven by lists. The base SharePoint API allows you to `CRUDL` lists, but the read operation doesn't return items[] or fields[] - this is a separate API operation. 
-With Sharepointer, list read operations also retrieve all fields[] and items[] on the list for convenience.  
+## Lists
+As mentioned above, SharePoint is driven by lists. The base SharePoint API allows you to `CRUDL` lists, but the read operation doesn't return Items[] or Fields[] - this is a separate API operation. 
+With Sharepointer, list read operations also retrieve all Fields[] and Items[] on the list for convenience.  
 
-#### List
+### Lists List
+Confusing, I know. Bear with me. Lists all objects of type `list` in sharepoints (and remember, almost everything in Sharepoint is a list!).
     
     sharepoint.lists.list(function(err, listRes){
       // listRes will be an array of lists [{ Id : '1a2b3c', ... }, { Id : '2b3c4d' }, { Id : '5d6e7f' }]
     });
     
-#### Read
-List Read can take a string as the first param (assumes list Id), or a params object specifying either a guid or title.  
-Note that list read also returns fields[] and items[]. This is different to how the SharePoint API behaves, and is offered as a convenience. 
+You can now use any of the following functions to operate upon lists. Note that each `lists` object in the array will also have a convenience function which operates on itself for read, update & delete. These are also documented below. 
+
+### Lists Create
+Creating a result requires a title and a description. 
+
+    sharepoint.lists.create({ title : 'My new list', description : 'Some list description' }, function(err, createRes){
+      // createRes will be the newly created list as an object { Id : 'someListGUID', title : 'My new list', ...}
+    });
     
-    // Get a list by ID - you can find this under the 'Id' preoprty in "lists" lists
+    
+### Lists Read
+List Read can take a string as the first param (assumes list Id), or a params object specifying either a guid or title.  
+The list operation already tells us quite a bit about that list, but this read call also returns Fields[] and Items[]. This is different to how the SharePoint API behaves, and is offered as a convenience. 
+    
+    // Get a list by ID - you can find this under the 'Id' property.
     sharepoint.lists.read('someListGUID', function(err, listReadResult){
-      // listReadResult will be an object { Id : 'someListGUID', Title : 'SomeListTitle', items : [{}, {}], fields : [{}, {}]  ... }
+      // listReadResult will be an object { Id : 'someListGUID', Title : 'SomeListTitle', Items : [{}, {}], Fields : [{}, {}]  ... }
     });
     
     // Get a list by name
@@ -84,29 +94,80 @@ Note that list read also returns fields[] and items[]. This is different to how 
       // listReadResult will be an object { Id : 'someListGUID', Title : 'some list name', ... }
     });
     
-#### Create
-Creating a result requires a title and a description. 
-
-    sharepoint.lists.create({ title : 'My new list', description : 'Some list description' }, function(err, createRes){
-      // createRes will be the newly created list as an object { Id : 'someListGUID', title : 'My new list', ...}
+    // You can also call a read() operation from an object returned from the list operation for convenience like this
+    sharepoint.lists.list(function(err, listRes){
+      var aList = listRes[0];
+      aList.read(function(err, aListReadResult){
+        
+      });
     });
     
-### Update
+## Lists Update
 Updating requires an ID and a title. Optionally, you can just specify all this in one object. 
     
-    // Update with 2 params
+    // Update specifying the Id separately 
     return sharepoint.lists.update('someListGuid', { Title : 'MyNewTitle' }, function(err, updateResult){
       // updateResult will be the object you passed in, but not the full list. To get the fully updated object, a subsequent read is needed. 
     });
     
-    // update all in 1 param
+    // Updating specifying the Id in one param
     return sharepoint.lists.update({ Id : 'someListGuid', Title : 'MyNewTitle' }, function(err, updateResult){
     });
     
-#### Delete
+    // You can also call a update() operation from an object returned from the list operation for convenience like this
+    sharepoint.lists.list(function(err, listRes){
+      var aList = listRes[0];
+      aList.update({Title : '' }, function(err){
+        
+      });
+    });
+    
+### Lists Delete
 Delete requires a list Id. Deletion by title is not possible. 
     
     sharepoint.lists.del('someListId', function(err){
       // Err will indicate if somethign went wrong - there's no second param
     });
     
+    // You can also call a delete() operation from an object returned from the list operation for convenience like this
+    sharepoint.lists.list(function(err, listRes){
+      var aList = listRes[0];
+      aList.update({Title : '' }, function(err){
+        
+      });
+    });
+
+##List Items
+Lists in sharepoint have a collection of items. These are usually another API call away, but as discussed earlier, sharepointer retrieves these upon performing a read() call. 
+
+###ListItems List
+To retrieve the items contained within a list, 
+    
+	sharepoint.listItems.list('someListGUID', function(err, itemsUnderThisList){
+
+    });
+Of course, we can also just perform a list read: 
+    
+    sharepoint.listItems.read('someListGUID', function(err, listReadResult){
+      // we now have the items under listReadResult.Items
+    });
+    
+###ListItem Create
+    
+    //TODO
+    
+###ListItem Read
+As part of reading a ListItem, we also retrieve it's File property, if any exists. This is helpful, because many lists include a file attachment (e.g. Document Libraries). If no file exists, this will simply be `undefined`. 
+    
+    sharepoint.listItems.read('someListGUID', 'someListItemId', function(err, singleListItem){
+
+    });
+    
+Of course, we can also just call .read() on a listItem, after we read it's containing list. 
+    
+    sharepoint.lists.read('someListGUID', function(err, listReadResult){
+      var anItemInThisList = listReadResult.Items[0];
+      anItemInThisList.read(function(err, listItem){
+        
+      });
+    });
