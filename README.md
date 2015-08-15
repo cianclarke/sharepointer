@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/cianclarke/sharepointer.svg)](https://travis-ci.org/cianclarke/sharepointer)
+
 Yet another Node.js Sharepoint client. This one:
 
 * Has test coverage
