@@ -7,12 +7,18 @@
     "test": "mocha -A -u exports --recursive -t 10000 ./test/unit"
   },
   "author": "Cian Clarke",
-  "license" : "MIT",
+  "license": "MIT",
   "dependencies": {
     "agentkeepalive": ">=1.2.0",
     "async": "~0.2.9",
     "httpntlm": "^1.5.2",
     "request": "^2.60.0",
     "underscore-deep-extend": "0.0.5"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-fh-build": "~0.0.8",
+    "mocha": "^2.2.4",
+    "nock": "^2.10.0"
   }
 }
