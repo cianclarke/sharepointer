@@ -17,16 +17,10 @@ exports.it_should_login_and_retrieve_lists = function(done) {
         return aListItem.ItemCount && aListItem.ItemCount > 0;
       });
       assert.ok(one, 'Error find list result: ' + listRes);
-      one.read(function(err, singleResult) {
+      one.read(function(err, singleListResult) {
         assert.ok(!err, 'Error reading a list result: ' + JSON.stringify(err));
-        assert.ok(singleResult, 'Error finding response from read result: ' + singleResult);
-        var singleItem = singleResult.Items[0];
-        assert.ok(singleItem, 'No item found in result items - cant continue testing');
-        singleItem.read(function(err, singleItemReadResult) {
-          assert.ok(!err, 'Error reading item in list: ' + JSON.stringify(err));
-          assert.ok(singleItemReadResult, 'No singleItemReadResult found');
-          return done();
-        });
+        assert.ok(singleListResult, 'Error finding response from read result: ' + singleListResult);
+        return done(null, singleListResult);
       });
     });
   });

@@ -1,13 +1,6 @@
 [![Build Status](https://travis-ci.org/cianclarke/sharepointer.svg)](https://travis-ci.org/cianclarke/sharepointer)
 
-Yet another Node.js Sharepoint client. This one:
-
-* Has test coverage
-* Isn't written in CofeeScript
-* Supports multiple authentication schemas - currently:
-  * NTLM
-  * Basic
-* Accepts pull requests :-)
+A Node.js SharePoint Client.
 
 # Usage Example
 ```javascript
@@ -58,7 +51,6 @@ Here's the basics I wanted to know about this product before I began integrating
   * SharePoint 2013 - the on premise version of Sharepoint which I've seen most often. 
   * Sharepoint 365 - the online SharePoint product. 
 * **Everything is a List** in SharePoint. Document Library? A list. The tasks app? Just a list. Discussion Board? You got it, it's a list. Site Pages? List. Turns out, Sharepoint reuses the base type `List` for a lot of things. 
-
     
     
 # Methods
@@ -160,8 +152,23 @@ sharepoint.listItems.read('someListGUID', function(err, listReadResult){
 ```
     
 ###ListItem Create
+We can create new ListItems within a list using the create function. The responsibility is on the user to ensure all required fields are included prior to creating a listItem, and no extraneous fields are included. SharePoint throws meaningful & useful errors (..for once) if you include incorrect fields here, so it's easy to debug. 
+
+```javascript
+sharepoint.listItems.create('someListGUID', { Title : 'My new list item', Remember: 'To include all fields' }, function(err, listCreateResult){
+
+});
+```
+We can also just call .create() on the `Items` property of a list which we've read.
+```javascript
+sharepoint.lists.read('someListGUID', function(err, listReadResult){
+  // Now that we've read a list, we can create an item under it by running:
+  listReadResult.Items.create({ Title : 'My new item' }, function(){
     
-    //TODO
+  });
+  // We could also use listReadResult.createItem() to the same effect
+});
+```
     
 ###ListItem Read
 As part of reading a ListItem, we also retrieve it's File property, if any exists. This is helpful, because many lists include a file attachment (e.g. Document Libraries). If no file exists, this will simply be `undefined`. 
@@ -179,3 +186,50 @@ sharepoint.lists.read('someListGUID', function(err, listReadResult){
   });
 });
 ```
+
+###ListItem Delete
+To delete a ListItem, we can use the del() function. 
+```javascript
+sharepoint.listItems.del('someListGUID', 'someListItemId', function(err){
+  
+});
+```
+Of course, we can also just call .del() on a listItem, after we read it's containing list. 
+```javascript
+sharepoint.lists.read('someListGUID', function(err, listReadResult){
+  var anItemInThisList = listReadResult.Items[0];
+  anItemInThisList.delete(function(err){
+    
+  });
+});
+```
+
+#Why another Sharepoint Client?
+Yet another SharePoint Client. This one:
+
+* Has test coverage
+* Isn't written in CofeeScript
+* Supports multiple authentication schemas - currently:
+  * NTLM
+  * Basic
+* Accepts pull requests :-)
+
+#Tests
+Tests are written in Mocha. Unit tests simply require the integration tests, and `nock` the API they integrate with - thus reducing the amount of test code we need to write. 
+##Running Unit tests
+This includes jshint, and the mocha unit test suite. 
+    
+    # install grunt globally
+    npm install grunt-cli -g
+    #run the tests
+    grunt test
+    
+##Running Integration Tests
+
+    #Setup environment variables with your SP creds:
+    export SP_USERNAME=YOUR_USERNAME
+    export SP_PASSWORD=YOUR_PASSWORD
+    export SP_HOST=https://your_sp_hostname.com
+    export SP_AUTH_TYPE=(ntlm|basic)
+    #Then run the tests:
+    grunt integration

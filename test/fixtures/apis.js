@@ -46,10 +46,6 @@ exports.list = function(){
   .get(listItemsUrl, '*')
   .reply(200, getreply, headers)
   .get(listFieldsUrl, '*')
-  .reply(200, getreply, headers)
-  .get(listItemUrl, '*')
-  .reply(200, getreply, headers)
-  .get(listItemFileUrl, '*')
   .reply(200, getreply, headers);
 };
 
@@ -66,4 +62,20 @@ exports.create = function(){
   // This is actually the DELETE request
   .post(listUrl, '*')
   .reply(200, postreply, headers);
+};
+
+exports.listitems = function(){
+  return nock(baseUrl)
+  .filteringRequestBody(allowAllRequestBodies)
+  .get(listItemUrl, '*')
+  .reply(200, getreply, headers)
+  .get(listItemFileUrl, '*')
+  .reply(200, getreply, headers)
+  // This represents the delete request
+  .post(listItemUrl, '*')
+  .reply(200, function(){ return ''; }, headers)
+  // this represents the list item create request
+  .post(listItemsUrl, '*')
+  .times(2)
+  .reply(200, getreply, headers);
 };
