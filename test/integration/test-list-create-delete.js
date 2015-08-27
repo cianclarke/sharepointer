@@ -6,11 +6,11 @@ var sharepoint = require('../../sharepoint.js')({
   password: process.env.SP_PASSWORD,
   type: process.env.SP_AUTH_TYPE,
   url: process.env.SP_HOST,
+  context : process.env.SP_CONTEXT || 'web',
   strictSSL: false
 });
 
 exports.it_should_create_and_delete_lists = function(done) {
-
   sharepoint.login(function(err) {
     assert.ok(!err, 'Error logging in: ' + JSON.stringify(err));
     sharepoint.lists.create({
