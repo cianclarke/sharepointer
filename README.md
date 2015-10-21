@@ -32,14 +32,15 @@ When initialising Sharepoint, there are a number of optional params which can be
 var sharepoint = require('sharepoint')({
   username : 'someusername',
   password : 'somepassword',
-  // Authentication type - current valid values: ntlm, basic, online
+  // Authentication type - current valid values: ntlm, basic, online, onlinesaml
   type : 'ntlm',
   url : 'https://someSharepointHostname.com',
   // All of the following params are optional:
   context : 'myCustomerSite', // Set to create resources outside of the base site context, `web`
   verbose : false, // Set to true to stop filtering responses, instead returning everything
   proxy : undefined, // set to string hostname of proxy if running through one
-  strictSSL : true // set to false if connecting to SP instance with self-signed cert
+  strictSSL : true, // set to false if connecting to SP instance with self-signed cert
+  federatedAuthUrl : 'http://mysamlloginservice.com' // only set for auth type 'onlinesaml', the URL of the SAML service which issues assertions to forward to the SHarePoint login URL
 });
 ```
     
@@ -214,6 +215,7 @@ Yet another SharePoint Client. This one:
   * NTLM
   * Basic
   * Online (Sharepoint 365/Online login flow)
+  * Online with SAML SSO (Sharepoint 365 to Federated SAML SSO flow)
 * Accepts pull requests :-)
 
 #Tests
@@ -232,6 +234,6 @@ This includes jshint, and the mocha unit test suite.
     export SP_USERNAME=YOUR_USERNAME
     export SP_PASSWORD=YOUR_PASSWORD
     export SP_HOST=https://your_sp_hostname.com
-    export SP_AUTH_TYPE=(ntlm|basic|online)
+    export SP_AUTH_TYPE=(ntlm|basic|online|onlinesaml)
     #Then run the tests:
     grunt integration
