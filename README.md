@@ -44,10 +44,12 @@ var sharepoint = require('sharepoint')({
 });
 ```
 ##Query Parameters
+```javascript
   fieldValuesAsText : true, //Return Lookup Field Values as Text for Items
   filterFields : [{field: 'field1', value: 'value1'}], //Filter Items in List based on field value(s) $filter=
   selectFields : ['field1', 'field2'], //Only return List or Item data for fields specified $select=
   expandFields : ['field1', 'field2'], //"JOIN" another list based on a lookup value and return data $expand=
+```
 
 # A Sharepoint Primer
 Skip this if you already know enough about SharePoint.  
