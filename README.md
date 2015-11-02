@@ -41,12 +41,14 @@ var sharepoint = require('sharepoint')({
   proxy : undefined, // set to string hostname of proxy if running through one
   strictSSL : true, // set to false if connecting to SP instance with self-signed cert
   federatedAuthUrl : 'http://mysamlloginservice.com' // only set for auth type 'onlinesaml', the URL of the SAML service which issues assertions to forward to the SHarePoint login URL
+});
+```
+##Query Parameters
   fieldValuesAsText : true, //Return Lookup Field Values as Text for Items
   filterFields : [{field: 'field1', value: 'value1'}], //Filter Items in List based on field value(s) $filter=
   selectFields : ['field1', 'field2'], //Only return List or Item data for fields specified $select=
   expandFields : ['field1', 'field2'], //"JOIN" another list based on a lookup value and return data $expand=
-});
-```
+
 # A Sharepoint Primer
 Skip this if you already know enough about SharePoint.  
 Here's the basics I wanted to know about this product before I began integrating:
