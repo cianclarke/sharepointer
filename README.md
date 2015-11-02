@@ -41,18 +41,12 @@ var sharepoint = require('sharepoint')({
   proxy : undefined, // set to string hostname of proxy if running through one
   strictSSL : true, // set to false if connecting to SP instance with self-signed cert
   federatedAuthUrl : 'http://mysamlloginservice.com' // only set for auth type 'onlinesaml', the URL of the SAML service which issues assertions to forward to the SHarePoint login URL
+  fieldValuesAsText : true, //Return Lookup Field Values as Text for Items
+  filterFields : [{field: 'field1', value: 'value1'}], //Filter Items in List based on field value(s) $filter=
+  selectFields : ['field1', 'field2'], //Only return List or Item data for fields specified $select=
+  expandFields : ['field1', 'field2'], //"JOIN" another list based on a lookup value and return data $expand=
 });
 ```
-##Additional Query Parameters
-* Return Field Values as Text when getting information for an item. (/FieldValuesAsText)
-fieldValuesAsText : "true"
-* Filter List Items ($filter=)
-filterFields : [{field: "field1", value: "value1"}, {field: "field2", value: "value2"}]
-* Limit fields returned when listing Items in a List or when getting information for an item ($select=)
-selectFields : ["field1", "field2"]
-* You can "JOIN" a lookup list and display values from that List with values from the main List you are working with ($expand=)
-expandFields : ["field1", "field2"]
-
 # A Sharepoint Primer
 Skip this if you already know enough about SharePoint.  
 Here's the basics I wanted to know about this product before I began integrating:
