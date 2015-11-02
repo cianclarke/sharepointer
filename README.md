@@ -40,10 +40,10 @@ var sharepoint = require('sharepoint')({
   verbose : false, // Set to true to stop filtering responses, instead returning everything
   proxy : undefined, // set to string hostname of proxy if running through one
   strictSSL : true, // set to false if connecting to SP instance with self-signed cert
-  federatedAuthUrl : 'http://mysamlloginservice.com' // only set for auth type 'onlinesaml', the URL of the SAML service which issues assertions to forward to the SHarePoint login URL
+  federatedAuthUrl : 'http://mysamlloginservice.com' // only set for auth type 'onlinesaml', the URL of the SAML service which issues assertions to forward to the SharePoint login URL
 });
 ```
-##Query Parameters
+##Additional Parameters for listing and reading Lists and ListItems
 ```javascript
   fieldValuesAsText : true, //Return Lookup Field Values as Text for Items
   filterFields : [{field: 'field1', value: 'value1'}], //Filter Items in List based on field value(s) $filter=
