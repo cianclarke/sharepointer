@@ -192,6 +192,18 @@ sharepoint.lists.read('someListGUID', function(err, listReadResult){
 });
 ```
 
+##ListItem Update
+To update a ListItem, we use the update() function.
+```javascript
+var listItemData {
+  itemId: ListItemID, //Value of the item's ID field
+  '__metadata': {
+    'type': 'SP.Data.MyListItem'}, //type is the item's type AKA ListItemEntityTypeFullName of the List to which the item belongs
+  'Title': 'Jim Wuz Here' //Item Field to update : Data to update the Field with
+}
+sharepoint.listItems.update(req.params.guid, listItemData, function(res));
+```
+
 ###ListItem Delete
 To delete a ListItem, we can use the del() function.
 ```javascript
