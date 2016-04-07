@@ -7,7 +7,7 @@ A Node.js SharePoint Client.
 var sharepoint = require('sharepoint')({
   username : 'someusername',
   password : 'somepassword',
-  // Authentication type - current valid values: ntlm, basic, online
+  // Authentication type - current valid values: ntlm, basic, online,onlinesaml
   type : 'ntlm',
   url : 'https://someSharepointHostname.com'
 });
