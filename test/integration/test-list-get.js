@@ -8,6 +8,7 @@ exports.it_should_login_and_retrieve_lists = function(done) {
     type: process.env.SP_AUTH_TYPE,
     url: process.env.SP_HOST,
     context : process.env.SP_CONTEXT || 'web',
+    federatedAuthUrl: process.env.SP_FEDERATED_AUTH_URL,
     strictSSL: false
   });
   
