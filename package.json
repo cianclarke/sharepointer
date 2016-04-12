@@ -19,8 +19,13 @@
     "xml2json": "^0.8.2"
   },
   "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-concurrent": "^2.3.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-fh-build": "~0.0.8",
+    "grunt-node-inspector": "^0.4.1",
+    "grunt-open": "^0.2.3",
+    "grunt-shell": "^1.2.1",
     "mocha": "^2.2.4",
     "nock": "^2.10.0"
   }
