@@ -15,7 +15,7 @@
     "httpntlm": "^1.5.2",
     "request": "^2.60.0",
     "underscore": "^1.8.3",
-    "underscore-deep-extend": "github:kurtmilam/underscoreDeepExtend",
+    "underscore-deep-extend": "^1.0.4",
     "xml2json": "^0.8.2"
   },
   "devDependencies": {
