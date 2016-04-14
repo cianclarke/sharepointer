@@ -41,6 +41,8 @@ var sharepoint = require('sharepoint')({
   proxy : undefined, // set to string hostname of proxy if running through one
   strictSSL : true, // set to false if connecting to SP instance with self-signed cert
   federatedAuthUrl : 'http://mysamlloginservice.com', // only set for auth type 'onlinesaml', the URL of the SAML service which issues assertions to forward to the SharePoint login URL
+  rtFa: <token>,// an optional parameter to set rtFa token value - used if you've previously authenticated and stored the tokens (captured from the rtFA property after logging in)
+  FedAuth:<token>, // an optional parameter to set FedAuth token value - used if you've previously authenticated and stored the tokens (captured from the FedAuth property after logging in)
   fieldValuesAsText : true, //Return Lookup Field Values as Text for Items
   filterFields : ["{\"field\": \"field1\", \"value\": \"value1\"}"], //Filter Items in List based on field value(s) $filter=
   selectFields : ['field1', 'field2'], //Only return List or Item data for fields specified $select=
