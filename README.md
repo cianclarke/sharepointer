@@ -7,7 +7,7 @@ A Node.js SharePoint Client.
 var sharepoint = require('sharepoint')({
   username : 'someusername',
   password : 'somepassword',
-  // Authentication type - current valid values: ntlm, basic, online
+  // Authentication type - current valid values: ntlm, basic, online,onlinesaml
   type : 'ntlm',
   url : 'https://someSharepointHostname.com'
 });
@@ -26,7 +26,7 @@ sharepoint.login(function(err){
 });
 ```
 
-##Paramaters
+## Parameters
 When initialising Sharepoint, there are a number of optional params which can be specified at init. Here are their defaults & descriptions
 ```javascript
 var sharepoint = require('sharepoint')({
@@ -40,7 +40,9 @@ var sharepoint = require('sharepoint')({
   verbose : false, // Set to true to stop filtering responses, instead returning everything
   proxy : undefined, // set to string hostname of proxy if running through one
   strictSSL : true, // set to false if connecting to SP instance with self-signed cert
-  federatedAuthUrl : 'http://mysamlloginservice.com', // only set for auth type 'onlinesaml', the URL of the SAML service which issues assertions to forward to the SHarePoint login URL
+  federatedAuthUrl : 'http://mysamlloginservice.com', // only set for auth type 'onlinesaml', the URL of the SAML service which issues assertions to forward to the SharePoint login URL
+  rtFa: <token>,// an optional parameter to set rtFa token value - used if you've previously authenticated and stored the tokens (captured from the rtFA property after logging in)
+  FedAuth:<token>, // an optional parameter to set FedAuth token value - used if you've previously authenticated and stored the tokens (captured from the FedAuth property after logging in)
   fieldValuesAsText : true, //Return Lookup Field Values as Text for Items
   filterFields : ["{\"field\": \"field1\", \"value\": \"value1\"}"], //Filter Items in List based on field value(s) $filter=
   selectFields : ['field1', 'field2'], //Only return List or Item data for fields specified $select=
@@ -140,10 +142,10 @@ sharepoint.lists.list(function(err, listRes){
 });
 ```
 
-##List Items
+## List Items
 Lists in sharepoint have a collection of items. These are usually another API call away, but as discussed earlier, sharepointer retrieves these upon performing a read() call.
 
-###ListItems List
+### ListItems List
 To retrieve the items contained within a list,
 ```javascript
 sharepoint.listItems.list('someListGUID', function(err, itemsUnderThisList){
@@ -157,7 +159,7 @@ sharepoint.listItems.read('someListGUID', function(err, listReadResult){
 });
 ```
 
-###ListItem Create
+### ListItem Create
 We can create new ListItems within a list using the create function. The responsibility is on the user to ensure all required fields are included prior to creating a listItem, and no extraneous fields are included. SharePoint throws meaningful & useful errors (..for once) if you include incorrect fields here, so it's easy to debug.
 
 ```javascript
@@ -176,7 +178,7 @@ sharepoint.lists.read('someListGUID', function(err, listReadResult){
 });
 ```
 
-###ListItem Read
+### ListItem Read
 As part of reading a ListItem, we also retrieve it's File property, if any exists. This is helpful, because many lists include a file attachment (e.g. Document Libraries). If no file exists, this will simply be `undefined`.
 ```javascript
 sharepoint.listItems.read('someListGUID', 'someListItemId', function(err, singleListItem){
@@ -193,7 +195,7 @@ sharepoint.lists.read('someListGUID', function(err, listReadResult){
 });
 ```
 
-##ListItem Update
+## ListItem Update
 To update a ListItem, we use the update() function.
 ```javascript
 var listItemData {
@@ -205,7 +207,7 @@ var listItemData {
 sharepoint.listItems.update('someListGUID', listItemData, function(res));
 ```
 
-###ListItem Delete
+### ListItem Delete
 To delete a ListItem, we can use the del() function.
 ```javascript
 sharepoint.listItems.del('someListGUID', 'someListItemId', function(err){
@@ -222,11 +224,11 @@ sharepoint.lists.read('someListGUID', function(err, listReadResult){
 });
 ```
 
-#Why another Sharepoint Client?
+# Why another Sharepoint Client?
 Yet another SharePoint Client. This one:
 
 * Has test coverage
-* Isn't written in CofeeScript
+* Isn't written in CoffeeScript
 * Supports multiple authentication schemas - currently:
   * NTLM
   * Basic
@@ -234,22 +236,23 @@ Yet another SharePoint Client. This one:
   * Online with SAML SSO (Sharepoint 365 to Federated SAML SSO flow)
 * Accepts pull requests :-)
 
-#Tests
+# Tests
 Tests are written in Mocha. Unit tests simply require the integration tests, and `nock` the API they integrate with - thus reducing the amount of test code we need to write.
-##Running Unit tests
+## Running Unit tests
 This includes jshint, and the mocha unit test suite.
-
-    # install grunt globally
-    npm install grunt-cli -g
-    #run the tests
-    grunt test
-
-##Running Integration Tests
-
-    #Setup environment variables with your SP creds:
-    export SP_USERNAME=YOUR_USERNAME
-    export SP_PASSWORD=YOUR_PASSWORD
-    export SP_HOST=https://your_sp_hostname.com
-    export SP_AUTH_TYPE=(ntlm|basic|online|onlinesaml)
-    #Then run the tests:
-    grunt integration
+```
+# install grunt globally
+npm install grunt-cli -g
+#run the tests
+grunt test
+```
+## Running Integration Tests
+```
+#Setup environment variables with your SP creds:
+export SP_USERNAME=YOUR_USERNAME
+export SP_PASSWORD=YOUR_PASSWORD
+export SP_HOST=https://your_sp_hostname.com
+export SP_AUTH_TYPE=(ntlm|basic|online|onlinesaml)
+#Then run the tests:
+grunt integration
+```
