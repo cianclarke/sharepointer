@@ -1,0 +1,32 @@
+<S:Envelope
+        xmlns:s='http://www.w3.org/2003/05/soap-envelope'
+        xmlns:wsa='http://schemas.xmlsoap.org/ws/2004/08/addressing'
+        xmlns:wst='http://schemas.xmlsoap.org/ws/2005/02/trust'
+        xmlns:wsu='http://schemas.xmlsoap.org/ws/2002/07/utility'
+        xmlns:wsc='http://schemas.microsoft.com/ws/2006/05/context'  xmlns:rm='http://schemas.microsoft.com/2006/11/ResourceManagement' >
+    <S:Header>
+        <wsa:To>
+            http://www.woodgrove.com/sender
+        </wsa:To>
+        <wsa:Action>
+            http://schemas.xmlsoap.org/ws/2005/02/trust/RSTR/Issue
+        </wsa:Action>
+        <wsa:MessageID>
+            uuid:0000010e-0000-0000-C000-000000000048
+        </wsa:MessageID>
+        <wsa:RelatesTo>
+            uuid:00000000-0000-0000-C000-000000000048
+        </wsa:RelatesTo>
+        <wsc:Context>
+            <wsc:InstanceId>19bc8ea5-27f8-4136-97a2-3699697fd271</wsc:InstanceId>
+        </wsc:Context>
+    </S:Header>
+    <S:Body>
+        <wst:RequestSecurityTokenResponse>
+            <wst:RequestedSecurityToken>
+                <wsse:BinarySecurityToken ValueType="wsse:X509v3" EncodingType="wsse:Base64Binary" Id="SecurityToken" >test</wsse:BinarySecurityToken>
+            </wst:RequestedSecurityToken>
+    </wst:RequestSecurityTokenResponse>
+</S:Body>
+</S:Envelope>
+
