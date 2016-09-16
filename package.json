@@ -8,6 +8,14 @@
   },
   "author": "Cian Clarke",
   "license": "MIT",
+  "homepage": "https://github.com/cianclarke/sharepointer#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cianclarke/sharepointer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cianclarke/sharepointer/issues"
+  },
   "dependencies": {
     "agentkeepalive": ">=1.2.0",
     "async": "~0.2.9",
